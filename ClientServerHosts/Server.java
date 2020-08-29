@@ -24,7 +24,7 @@ public class Server extends JFrame {
 
         try {
             // create a server socket
-            ServerSocket serverocket = new ServerSocket(8000);
+            ServerSocket serverSocket = new ServerSocket(8000);
             jta.append("Server started at " + new Date() + "\n");
 
             // Listening for a connection request
@@ -49,7 +49,7 @@ public class Server extends JFrame {
             }
         }
         catch(IOException ex) {
-            System.er.println(ex);
+            System.err.println(ex);
         }
     }
 }

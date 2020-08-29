@@ -25,7 +25,7 @@ public class Client extends JFrame {
         panel.setLayout(new BorderLayout());
         panel.add(new JLabel("Enter radius"), BorderLayout.WEST);
         panel.add(jtf, BorderLayout.CENTER);
-        jtf.setHorisontalAligment(JTextField.RIGHT);
+        jtf.setHorizontalAlignment(JTextField.RIGHT);
 
         setLayout(new BorderLayout());
         add(panel, BorderLayout.NORTH);
@@ -49,13 +49,13 @@ public class Client extends JFrame {
             // send data to server
             toServer = new DataOutputStream(socket.getOutputStream());
         }
-        catch(IOException) {
+        catch(IOException ex) {
             jta.append(ex.toString() + '\n');
         }
     }
 
     private class TextFieldListener implements ActionListener {
-        public void actionPerformed(ActionEcent e) {
+        public void actionPerformed(ActionEvent e) {
             try {
                 double radius = Double.parseDouble(jtf.getText().trim());
 
