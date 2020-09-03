@@ -11,6 +11,12 @@ public class TCPConnection {
     private final BufferedWriter out; //output stream (write data)
     private final TCPConnectionListener eventListener;
 
+    // constructor overloading
+    public TCPConnection(TCPConnectionListener eventListener, String ipAddress, int port) throws IOException {
+        // call another constructor from(this) constructor
+        this(eventListener, new Socket(ipAddress, port));
+    }
+
     // constructor for connection
     public TCPConnection(TCPConnectionListener eventListener, Socket socket) throws IOException {
         this.eventListener = eventListener;
@@ -29,13 +35,36 @@ public class TCPConnection {
                         eventListener.onRecieveString(TCPConnection.this, message);
                     }
                 } catch (IOException ex) {
-
+                    eventListener.onException(TCPConnection.this, ex);
                 } finally {
-
+                    eventListener.onDisconnect((TCPConnection.this));
                 }
             }
         });
         recieveThread.start(); // run the stream
     }
 
+    public synchronized void sendMessage(String value) {
+        try {
+            out.write(value + "\r\n"); // \r\n may not need in macOS
+            out.flush();
+        } catch (IOException ex) {
+            eventListener.onException(TCPConnection.this, ex);
+            disconnect();
+        }
+    }
+
+    public synchronized void disconnect() {
+        recieveThread.interrupt();
+        try {
+            socket.close();
+        } catch (IOException ex) {
+            eventListener.onException(TCPConnection.this, ex);
+        }
+    }
+
+    @Override
+    public  String toString() {
+         return "TCPConnection: " + socket.getInetAddress() + ": " + socket.getPort();
+    }
 }
