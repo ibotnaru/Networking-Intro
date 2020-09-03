@@ -46,7 +46,7 @@ public class TCPConnection {
 
     public synchronized void sendMessage(String value) {
         try {
-            out.write(value + "\r\n"); // \r\n may not need in macOS
+            out.write(value + "\r\n");
             out.flush();
         } catch (IOException ex) {
             eventListener.onException(TCPConnection.this, ex);
